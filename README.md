@@ -7,7 +7,7 @@ Project: Creating a Flappy Bird game clone using Tuffy as our hero in the advent
 
 Eduardo Rayo - erayo@csu.fullerton.edu
 
-Farnam Keshavarzian -
+Farnam Keshavarzian - farnam@csu.fullerton.edu
 
 Miles Furnish - milesf7@csu.fullerton.edu
 
