@@ -9,6 +9,10 @@ const DEGREE = Math.PI/180;
 // LOAD SPRITE IMAGE
 const sprite = new Image();
 sprite.src = "img/sprite.png";
+// LOAD BACKGROUND IMAGE
+const bg = new Image();
+bg.src = "img/bg.png";
+
 
 // LOAD SOUNDS
 const SCORE_S = new Audio();
@@ -25,6 +29,8 @@ SWOOSHING.src = "audio/sfx_swooshing.wav";
 
 const DIE = new Audio();
 DIE.src = "audio/sfx_die.wav";
+
+let gamespeed = 1;
 
 // GAME STATE
 const state = {
@@ -72,19 +78,30 @@ cvs.addEventListener("click", function(evt){
 });
 
 const background = {
-    sX : 0,
-    sY : 0,
-    w : 275,
-    h : 226,
-    x : 0,
-    y : cvs.height - 226,
-    
-    draw : function(){
-        ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x, this.y, this.w, this.h);
-        
-        ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x + this.w, this.y, this.w, this.h);
+    x1: 0,
+    x2: 1023,
+    y: -100,
+    width: 1023,
+    height: cvs.height
+}
+
+
+function handleBackground() {
+    if(background.x1 <= -background.width + gamespeed) {
+        background.x1 = background.width;
     }
-    
+    else {
+        background.x1 -= gamespeed;
+    }
+
+    if(background.x2 <= -background.width + gamespeed){
+        background.x2 = background.width;
+    }
+    else (background.x2 -= gamespeed);
+
+    ctx.drawImage(bg, background.x1, background.y, background.width, background.height);
+    ctx.drawImage(bg, background.x2, background.y, background.width, background.height);
+
 }
 
 const foreground = {
@@ -298,7 +315,7 @@ function draw(){
     ctx.fillStyle = "#70c5ce";
     ctx.fillRect(0, 0, cvs.width, cvs.height);
     
-    background.draw();
+    handleBackground();
     pipes.draw();
     foreground.draw();
     tuffy.draw();
