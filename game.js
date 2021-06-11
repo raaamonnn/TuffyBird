@@ -31,6 +31,8 @@ const DIE = new Audio();
 DIE.src = "audio/sfx_die.wav";
 
 let gamespeed = 1;
+var start = new Boolean(false);
+
 
 // GAME STATE
 const state = {
@@ -58,13 +60,14 @@ cvs.addEventListener("click", function(evt){
         case state.game:
             if(tuffy.y - tuffy.radius <= 0) return;
             tuffy.flap();
+            start = true;
             FLAP.play();
             break;
         case state.over:
+            start = false;
             let rect = cvs.getBoundingClientRect();
             let clickX = evt.clientX - rect.left;
             let clickY = evt.clientY - rect.top;
-            
             // CHECK IF WE CLICK ON THE START BUTTON
             if(clickX >= startBtn.x && clickX <= startBtn.x + startBtn.w && clickY >= startBtn.y && clickY <= startBtn.y + startBtn.h){
                 pipes.reset();
@@ -82,26 +85,36 @@ const background = {
     x2: 1023,
     y: -100,
     width: 1023,
-    height: cvs.height
+    height: cvs.height,
 }
 
-
 function handleBackground() {
-    if(background.x1 <= -background.width + gamespeed) {
-        background.x1 = background.width;
-    }
-    else {
-        background.x1 -= gamespeed;
-    }
 
-    if(background.x2 <= -background.width + gamespeed){
-        background.x2 = background.width;
+    if(start == true)
+    {
+        if(background.x1 <= -background.width + gamespeed) {
+            background.x1 = background.width;
+        }
+        else {
+            background.x1 -= gamespeed;
+        }
+
+        if(background.x2 <= -background.width + gamespeed){
+            background.x2 = background.width;
+        }
+        else (background.x2 -= gamespeed);
     }
-    else (background.x2 -= gamespeed);
+    else
+    {
+        background.x1 = 0;
+        background.x2 = 1023;
+        background.y  = -100;
+        background.width = 1023;
+        background.height = 480;
+    }
 
     ctx.drawImage(bg, background.x1, background.y, background.width, background.height);
     ctx.drawImage(bg, background.x2, background.y, background.width, background.height);
-
 }
 
 const foreground = {
@@ -314,7 +327,7 @@ const pipes = {
 function draw(){
     ctx.fillStyle = "#70c5ce";
     ctx.fillRect(0, 0, cvs.width, cvs.height);
-    
+
     handleBackground();
     pipes.draw();
     foreground.draw();
