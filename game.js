@@ -75,8 +75,6 @@ cvs.addEventListener("click", function(evt){
                 state.current = state.getReady;
             }
             break;
-
-            
     }
 });
 
@@ -263,7 +261,7 @@ const pipes = {
     
     w : 53,
     h : 400,
-    gap : 85,
+    gap : 150,
     maxYPos : -150,
     dx : 2,
     
@@ -285,7 +283,7 @@ const pipes = {
     update: function(){
         if(state.current !== state.game) return;
         
-        if(frames%100 == 0){
+        if(frames%150 == 0){
             this.position.push({
                 x : cvs.width,
                 y : this.maxYPos * ( Math.random() + 1)
