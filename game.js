@@ -13,6 +13,8 @@ sprite.src = "img/sprite.png";
 const bg = new Image();
 bg.src = "img/bg.png";
 
+const bg2 = new Image();
+bg2.src = "img/csuf-2.png";
 
 // LOAD SOUNDS
 let scoreSound = "audio/sfx_point.wav";
@@ -26,10 +28,6 @@ let swooshingSound = "audio/sfx_swooshing.wav";
 
 const DIE = new Audio();
 DIE.src = "audio/sfx_die.wav";
-
-let gamespeed = 1;
-var start = new Boolean(false);
-
 
 // GAME STATE
 const state = {
@@ -65,7 +63,6 @@ cvs.addEventListener("click", function(evt){
             FLAP.play();
             break;
         case state.over:
-            start = false;
             let rect = cvs.getBoundingClientRect();
             let clickX = evt.clientX - rect.left;
             let clickY = evt.clientY - rect.top;
@@ -86,35 +83,37 @@ const background = {
     y: -100,
     width: 1023,
     height: cvs.height,
-}
 
-function handleBackground() {
+    dx : 1,
 
-    if(start == true)
-    {
-        if(background.x1 <= -background.width + gamespeed) {
-            background.x1 = background.width;
-        }
-        else {
-            background.x1 -= gamespeed;
-        }
+    draw : function(){
+        ctx.drawImage(bg, this.x1, this.y, this.width, this.height);
+        ctx.drawImage(bg2, this.x2, this.y, this.width, this.height);
+    },
 
-        if(background.x2 <= -background.width + gamespeed){
-            background.x2 = background.width;
+    update: function(){
+        if(state.current == state.game){
+            if(background.x1 <= -background.width + this.dx) {
+                background.x1 = background.width;
+            }
+            else {
+                background.x1 -= this.dx;
+            }
+    
+            if(background.x2 <= -background.width + this.dx){
+                background.x2 = background.width;
+            }
+            else (background.x2 -= this.dx);
         }
-        else (background.x2 -= gamespeed);
+        else
+        {
+            background.x1 = 0;
+            background.x2 = 1023;
+            background.y  = -100;
+            background.width = 1023;
+            background.height = 480;
+        }
     }
-    else
-    {
-        background.x1 = 0;
-        background.x2 = 1023;
-        background.y  = -100;
-        background.width = 1023;
-        background.height = 480;
-    }
-
-    ctx.drawImage(bg, background.x1, background.y, background.width, background.height);
-    ctx.drawImage(bg, background.x2, background.y, background.width, background.height);
 }
 
 const foreground = {
@@ -128,8 +127,7 @@ const foreground = {
     dx : 2,
     
     draw : function(){
-        ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x, this.y, this.w, this.h);
-        
+        ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x, this.y, this.w, this.h); 
         ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x + this.w, this.y, this.w, this.h);
     },
     
@@ -285,7 +283,7 @@ const pipes = {
     update: function(){
         if(state.current !== state.game) return;
         
-            if(score.value < 10) {
+            if(score.value < 5) {
                 if(frames%150 == 0){
                     this.position.push({
                         x : cvs.width,
@@ -301,7 +299,7 @@ const pipes = {
                     });
                 }
             }
-            else {
+            else if (score.value < 20) {
                 if(frames%80 == 0){
                     this.position.push({
                         x : cvs.width,
@@ -386,7 +384,7 @@ function draw(){
     ctx.fillStyle = "#70c5ce";
     ctx.fillRect(0, 0, cvs.width, cvs.height);
 
-    handleBackground();
+    background.draw();
     pipes.draw();
     foreground.draw();
     tuffy.draw();
@@ -396,6 +394,7 @@ function draw(){
 }
 
 function update(){
+    background.update();
     tuffy.update();
     foreground.update();
     pipes.update();
