@@ -15,17 +15,14 @@ bg.src = "img/bg.png";
 
 
 // LOAD SOUNDS
-const SCORE_S = new Audio();
-SCORE_S.src = "audio/sfx_point.wav";
+let scoreSound = "audio/sfx_point.wav";
 
-const FLAP = new Audio();
-FLAP.src = "audio/sfx_flap.wav";
+let flapSound = "audio/sfx_flap.wav";
 
 const HIT = new Audio();
 HIT.src = "audio/sfx_hit.wav";
 
-const SWOOSHING = new Audio();
-SWOOSHING.src = "audio/sfx_swooshing.wav";
+let swooshingSound = "audio/sfx_swooshing.wav";
 
 const DIE = new Audio();
 DIE.src = "audio/sfx_die.wav";
@@ -55,12 +52,16 @@ cvs.addEventListener("click", function(evt){
     switch(state.current){
         case state.getReady:
             state.current = state.game;
+            const SWOOSHING = new Audio();
+            SWOOSHING.src = swooshingSound;
             SWOOSHING.play();
             break;
         case state.game:
             if(tuffy.y - tuffy.radius <= 0) return;
             tuffy.flap();
             start = true;
+            const FLAP = new Audio();
+            FLAP.src = flapSound;
             FLAP.play();
             break;
         case state.over:
@@ -284,12 +285,32 @@ const pipes = {
     update: function(){
         if(state.current !== state.game) return;
         
-        if(frames%150 == 0){
-            this.position.push({
-                x : cvs.width,
-                y : this.maxYPos * ( Math.random() + 1)
-            });
-        }
+            if(score.value < 10) {
+                if(frames%150 == 0){
+                    this.position.push({
+                        x : cvs.width,
+                        y : this.maxYPos * ( Math.random() + 1)
+                    });
+                }
+            }
+            else if(score.value < 10) {
+                if(frames%100 == 0){
+                    this.position.push({
+                        x : cvs.width,
+                        y : this.maxYPos * ( Math.random() + 1)
+                    });
+                }
+            }
+            else {
+                if(frames%80 == 0){
+                    this.position.push({
+                        x : cvs.width,
+                        y : this.maxYPos * ( Math.random() + 1)
+                    });
+                }
+            }
+        
+        
         for(let i = 0; i < this.position.length; i++){
             let p = this.position[i];
             
@@ -310,11 +331,14 @@ const pipes = {
             // MOVE THE PIPES TO THE LEFT
             p.x -= this.dx;
             
+
             // if the pipes go beyond canvas, we delete them from the array
             if(p.x + this.w <= 0){
                 this.position.shift();
                 score.value += 1;
-                SCORE_S.play();
+                const SCORE_S = new Audio();
+                SCORE_S.src = scoreSound;    
+                SCORE_S.play()
                 score.best = Math.max(score.value, score.best);
                 localStorage.setItem("best", score.best);
             }
