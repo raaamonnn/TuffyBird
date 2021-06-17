@@ -12,6 +12,9 @@ sprite.src = "img/sprite.png";
 // LOAD BACKGROUND IMAGE
 const bg = new Image();
 bg.src = "img/bg.png";
+// LOAD TUFFY IMAGE
+const tuffy = new Image();
+tuffy.src = "img/TuffyClear.png";
 
 const bg2 = new Image();
 bg2.src = "img/csuf-2.png";
