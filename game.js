@@ -158,7 +158,7 @@ const tuffy = {
     
     frame : 0,
     
-    gravity : 0.125,
+    gravity : 0.05,
     jump : 4.6,
     speed : 0,
     rotation : 0,
