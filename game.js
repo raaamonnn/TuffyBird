@@ -144,12 +144,9 @@ const foreground = {
 
 const tuffy = {
     animation : [
-        {sX: 12, sY : 18},
-        {sX: 12, sY : 58},
-        {sX: 12, sY : 18},
-        {sX: 12, sY : 58}
+        {sX: 12, sY : 18}
     ],
-    x : 50,
+    x : 0,
     y : 150,
     w : 64,
     h : 12,
