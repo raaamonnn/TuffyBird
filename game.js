@@ -18,8 +18,8 @@ const bg2 = new Image();
 bg2.src = "img/csuf-2.png";
 
 // LOAD TUFFY IMAGE
-const tuffy = new Image();
-tuffy.src = "img/TuffyClear.png";
+const eleph = new Image();
+eleph.src = "img/TuffyClear.png";
 
 // LOAD SOUNDS
 const SCORE_S = new Audio();
@@ -143,10 +143,14 @@ const foreground = {
 }
 
 const tuffy = {
+    animation : [
+        {sX: 12, sY : 18},
+        {sX:12 , sY : 58}
+    ],
     x : 50,
     y : 150,
-    w : 34,
-    h : 26,
+    w : 64,
+    h : 12,
     
     radius : 12,
     
@@ -163,7 +167,7 @@ const tuffy = {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rotation);
-        ctx.drawImage(tuffy, this.w, this.h,- this.w/2, - this.h/2, this.w, this.h);
+        ctx.drawImage(eleph, this.w, this.h,- this.w/2, - this.h/2, this.w, this.h);
         
         ctx.restore();
     },
