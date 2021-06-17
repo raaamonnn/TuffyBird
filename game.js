@@ -167,7 +167,7 @@ const tuffy = {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rotation);
-        ctx.drawImage(eleph, this.w, this.h,- this.w/2, - this.h/2, this.w, this.h);
+        ctx.drawImage(eleph, bird.sX, bird.sY, this.w, this.h,- this.w/2, - this.h/2, this.w, this.h);
         
         ctx.restore();
     },
