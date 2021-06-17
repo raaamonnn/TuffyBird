@@ -366,7 +366,7 @@ const pipes = {
 // SCORE
 const score= {
     best : parseInt(localStorage.getItem("best")) || 0,
-    value : 12,
+    value : 0,
 
     draw : function(){
         ctx.fillStyle = "#FFF";
