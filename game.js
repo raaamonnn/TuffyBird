@@ -281,15 +281,35 @@ const pipes = {
             ctx.drawImage(sprite, this.bottom.sX, this.bottom.sY, this.w, this.h, p.x, bottomYPos, this.w, this.h);
         }
     },
-
-    update: function(){
+update: function(){
         if(state.current !== state.game) return;
 
-        if(frames%150 == 0){
-            this.position.push({
-                x : cvs.width,
-                y : this.maxYPos * ( Math.random() + 1)
-            });
+        if(score.value < 5) {
+            pipes.gap = 150;
+            if(frames%150 == 0){
+                this.position.push({
+                    x : cvs.width,
+                    y : this.maxYPos * ( Math.random() + 1)
+                });
+            }
+        }
+        else if(score.value < 10) {
+            if(frames%100 == 0){
+                pipes.gap = 130;
+                this.position.push({
+                    x : cvs.width,
+                    y : this.maxYPos * ( Math.random() + 1)
+                });
+            }
+        }
+        else if (score.value < 20) {
+            if(frames%80 == 0){
+                pipes.gap = 110;
+                this.position.push({
+                    x : cvs.width,
+                    y : this.maxYPos * ( Math.random() + 1)
+                });
+            }
         }
         for(let i = 0; i < this.position.length; i++){
             let p = this.position[i];
