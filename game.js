@@ -35,6 +35,11 @@ SWOOSHING.src = "audio/sfx_swooshing.wav";
 const DIE = new Audio();
 DIE.src = "audio/sfx_die.wav";
 
+// function gets a random number between the specific min and max
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
 // GAME STATE
 const state = {
     current : 0,
@@ -281,36 +286,46 @@ const pipes = {
             ctx.drawImage(sprite, this.bottom.sX, this.bottom.sY, this.w, this.h, p.x, bottomYPos, this.w, this.h);
         }
     },
-update: function(){
-        if(state.current !== state.game) return;
 
-        if(score.value < 5) {
-            pipes.gap = 150;
-            if(frames%150 == 0){
-                this.position.push({
-                    x : cvs.width,
-                    y : this.maxYPos * ( Math.random() + 1)
-                });
+    update: function(){
+            if(state.current !== state.game) return;
+
+            if(score.value < 5) {
+                pipes.gap = 150;
+                if(frames%150 == 0){
+                    this.position.push({
+                        x : cvs.width,
+                        y : this.maxYPos * ( Math.random() + 1)
+                    });
+                }
             }
-        }
-        else if(score.value < 10) {
-            if(frames%100 == 0){
-                pipes.gap = 130;
-                this.position.push({
-                    x : cvs.width,
-                    y : this.maxYPos * ( Math.random() + 1)
-                });
+            else if(score.value < 10) {
+                if(frames%100 == 0){
+                    pipes.gap = 130;
+                    this.position.push({
+                        x : cvs.width,
+                        y : this.maxYPos * ( Math.random() + 1)
+                    });
+                }
             }
-        }
-        else if (score.value < 20) {
-            if(frames%80 == 0){
-                pipes.gap = 110;
-                this.position.push({
-                    x : cvs.width,
-                    y : this.maxYPos * ( Math.random() + 1)
-                });
+            else if (score.value < 20) {
+                if(frames%80 == 0){
+                    pipes.gap = getRandomArbitrary(111,129);
+                    this.position.push({
+                        x : cvs.width,
+                        y : this.maxYPos * ( Math.random() + 1)
+                    });
+                }
             }
-        }
+            else if (score.value < 100) {
+                if(frames%70 == 0){
+                    pipes.gap = getRandomArbitrary(100,110);
+                    this.position.push({
+                        x : cvs.width,
+                        y : this.maxYPos * ( Math.random() + 1)
+                    });
+                }
+            }
         for(let i = 0; i < this.position.length; i++){
             let p = this.position[i];
 
@@ -351,7 +366,7 @@ update: function(){
 // SCORE
 const score= {
     best : parseInt(localStorage.getItem("best")) || 0,
-    value : 0,
+    value : 12,
 
     draw : function(){
         ctx.fillStyle = "#FFF";
