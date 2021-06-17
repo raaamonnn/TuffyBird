@@ -17,14 +17,17 @@ const bg2 = new Image();
 bg2.src = "img/csuf-2.png";
 
 // LOAD SOUNDS
-let scoreSound = "audio/sfx_point.wav";
+const SCORE_S = new Audio();
+SCORE_S.src = "audio/sfx_point.wav";
 
-let flapSound = "audio/sfx_flap.wav";
+const FLAP = new Audio();
+FLAP.src = "audio/sfx_flap.wav";
 
 const HIT = new Audio();
 HIT.src = "audio/sfx_hit.wav";
 
-let swooshingSound = "audio/sfx_swooshing.wav";
+const SWOOSHING = new Audio();
+SWOOSHING.src = "audio/sfx_swooshing.wav";
 
 const DIE = new Audio();
 DIE.src = "audio/sfx_die.wav";
@@ -50,16 +53,11 @@ cvs.addEventListener("click", function(evt){
     switch(state.current){
         case state.getReady:
             state.current = state.game;
-            const SWOOSHING = new Audio();
-            SWOOSHING.src = swooshingSound;
             SWOOSHING.play();
             break;
         case state.game:
             if(tuffy.y - tuffy.radius <= 0) return;
             tuffy.flap();
-            start = true;
-            const FLAP = new Audio();
-            FLAP.src = flapSound;
             FLAP.play();
             break;
         case state.over:
@@ -71,6 +69,7 @@ cvs.addEventListener("click", function(evt){
                 pipes.reset();
                 tuffy.speedReset();
                 score.reset();
+                medals.reset();
                 state.current = state.getReady;
             }
             break;
@@ -246,6 +245,8 @@ const gameOver = {
     
 }
 
+
+
 // PIPES
 const pipes = {
     position : [],
@@ -264,7 +265,7 @@ const pipes = {
     gap : 150,
     maxYPos : -150,
     dx : 2,
-    
+
     draw : function(){
         for(let i  = 0; i < this.position.length; i++){
             let p = this.position[i];
@@ -283,32 +284,12 @@ const pipes = {
     update: function(){
         if(state.current !== state.game) return;
         
-            if(score.value < 5) {
-                if(frames%150 == 0){
-                    this.position.push({
-                        x : cvs.width,
-                        y : this.maxYPos * ( Math.random() + 1)
-                    });
-                }
-            }
-            else if(score.value < 10) {
-                if(frames%100 == 0){
-                    this.position.push({
-                        x : cvs.width,
-                        y : this.maxYPos * ( Math.random() + 1)
-                    });
-                }
-            }
-            else if (score.value < 20) {
-                if(frames%80 == 0){
-                    this.position.push({
-                        x : cvs.width,
-                        y : this.maxYPos * ( Math.random() + 1)
-                    });
-                }
-            }
-        
-        
+        if(frames%150 == 0){
+            this.position.push({
+                x : cvs.width,
+                y : this.maxYPos * ( Math.random() + 1)
+            });
+        }
         for(let i = 0; i < this.position.length; i++){
             let p = this.position[i];
             
@@ -329,14 +310,11 @@ const pipes = {
             // MOVE THE PIPES TO THE LEFT
             p.x -= this.dx;
             
-
             // if the pipes go beyond canvas, we delete them from the array
             if(p.x + this.w <= 0){
                 this.position.shift();
                 score.value += 1;
-                const SCORE_S = new Audio();
-                SCORE_S.src = scoreSound;    
-                SCORE_S.play()
+                SCORE_S.play();
                 score.best = Math.max(score.value, score.best);
                 localStorage.setItem("best", score.best);
             }
@@ -380,6 +358,43 @@ const score= {
     }
 }
 
+//MEDALS
+const medals = {
+    sX: 359,    
+    sY: 112,    
+    w: 45,
+    h: 45,
+    x: 73,      //X cord of where to draw
+    y: 177,     //Y cord of where to draw
+
+    draw: function () {
+        if(score.value >= 20){
+            this.sX = 359
+            this.sY = 158;
+        } else if (score.value >= 15){
+            this.sX = 311;
+            this.sY = 158;
+        } else if (score.value >= 10){
+            this.sX = 359;
+            this.sY = 112;
+        } else if (score.value >= 5){
+            this.sX = 311;
+            this.sY = 112;
+        }
+
+        if(score.value >= 5)
+        {
+            if (state.current == state.over) {
+                ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x, this.y, this.w, this.h);
+            }
+        }
+    },
+
+    reset : function(){
+        this.sY = 112;
+    }
+}
+
 function draw(){
     ctx.fillStyle = "#70c5ce";
     ctx.fillRect(0, 0, cvs.width, cvs.height);
@@ -391,6 +406,7 @@ function draw(){
     getReady.draw();
     gameOver.draw();
     score.draw();
+    medals.draw();
 }
 
 function update(){
