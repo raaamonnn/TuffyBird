@@ -20,11 +20,10 @@ const eleph = new Image();
 eleph.src = "img/tuffyclear.png";
 
 // LOAD SOUNDS
-const SCORE_S = new Audio();
-SCORE_S.src = "audio/sfx_point.wav";
 
-const FLAP = new Audio();
-FLAP.src = "audio/sfx_flap.wav";
+const scoreSound = "audio/sfx_point.wav";
+const flapSound = "audio/sfx_flap.wav";
+
 
 const HIT = new Audio();
 HIT.src = "audio/sfx_hit.wav";
@@ -66,6 +65,8 @@ cvs.addEventListener("click", function(evt){
         case state.game:
             if(tuffy.y - tuffy.radius <= 0) return;
             tuffy.flap();
+            const FLAP = new Audio();
+            FLAP.src = flapSound;
             FLAP.play();
             break;
         case state.over:
@@ -350,6 +351,8 @@ const pipes = {
             if(p.x + this.w <= 0){
                 this.position.shift();
                 score.value += 1;
+                const SCORE_S = new Audio();
+                SCORE_S.src = scoreSound;
                 SCORE_S.play();
                 score.best = Math.max(score.value, score.best);
                 localStorage.setItem("best", score.best);
