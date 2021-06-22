@@ -4,6 +4,9 @@ const ctx = cvs.getContext("2d");
 
 // GAME VARS AND CONSTS
 let frames = 0;
+let then = new Date().getTime();
+//let delta = 0;
+let interval = 1000 / 60;
 const DEGREE = Math.PI/180;
 
 // LOAD SPRITE IMAGE
@@ -450,9 +453,14 @@ function draw(){
 
 function update(){
     background.update();
-    tuffy.update();
     foreground.update();
     pipes.update();
+    let now = new Date().getTime();
+    let delta = now - then;
+    if (delta > interval) {
+        tuffy.update();
+        then = now - (delta % interval);
+    }
 }
 
 function main(){
