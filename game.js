@@ -12,6 +12,8 @@ const DEGREE = Math.PI/180;
 // LOAD SPRITE IMAGE
 const sprite = new Image();
 sprite.src = "img/sprite.png";
+const dSprite = new Image();
+dSprite.src = "img/dogeSprite.png";
 // LOAD BACKGROUND IMAGE
 const bg = new Image();
 bg.src = "img/bg.png";
@@ -41,6 +43,9 @@ SWOOSHING.src = "audio/sfx_swooshing.wav";
 const DIE = new Audio();
 DIE.src = "audio/sfx_die.wav";
 
+const bMusic = new Audio();
+bMusic.src = "audio/song.mp4";
+
 // function gets a random number between the specific min and max
 function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
@@ -54,16 +59,74 @@ const state = {
     over : 2
 }
 
+const gSetting =
+{
+    frame1 : 200,
+    frame2 : 150,
+    frame3 : 90,
+    frame4 : 80,
+    gap1 : 150,
+    gap2 : 130,
+    score1 : 5,
+    score2 : 10,
+    score3 : 20,
+    score4 : 100,
+
+    isMenu : false,
+
+    pressEasy : function()
+    {
+        this.gap1 = 170;
+        this.gap2 = 150;
+        this.frame1 = 210;
+        this.frame2 = 160;
+        this.frame3 = 100;
+        this.frame4 = 90;
+        this.score1 = 5;
+        this.score2 = 10;
+        this.score3 = 20;
+        this.score4 = 40;
+    },
+
+    pressHard : function()
+    {
+        this.gap1 = 130;
+        this.gap2 = 110;
+        this.frame1 = 180;
+        this.frame2 = 130;
+        this.frame3 = 70;
+        this.frame4 = 60;
+        this.score1 = 3;
+        this.score2 = 8;
+        this.score3 = 15;
+        this.score4 = 25;
+    }
+}
+
 // START BUTTON COORD
 const startBtn = {
     x : 120,
     y : 260,
     w : 83,
-    h : 29
+    h : 29,
+
+    press : function()
+    {
+        pipes.reset();
+        tuffy.speedReset();
+        score.reset();
+        medals.reset();
+        state.current = state.getReady;
+    }
 }
 
 const gameControl =
 {
+    sMenuX : 772,
+    sMenuY : 82,
+    menuW : 63,
+    menuH : 20,
+
     easyX : 120,
     easyY : 295,
     easyW : 83,
@@ -74,11 +137,31 @@ const gameControl =
     hardW : 83,
     hardH : 29,
 
+    spX : 240,
+    spY : 518,
+    sppX : 572,
+    sppY : 263,
+    sW : 20,
+    sH : 20,
+
+    pmX : 295,
+    pmY : 5,
+    smX : 270,
+
     draw : function(){
         if(state.current == state.over)
         {
-            ctx.drawImage(hardButton, this.hardX, this.hardY, this.hardW, this.hardH);
-            ctx.drawImage(easyButton, this.easyX, this.easyY, this.easyW, this.easyH);
+            if(!gSetting.isMenu)
+                ctx.drawImage(dSprite, this.sMenuX, this.sMenuY, this.menuW, this.menuH, this.easyX, this.easyY, startBtn.w, startBtn.h);
+            
+            if(gSetting.isMenu)
+            {
+                ctx.drawImage(hardButton, this.hardX, this.hardY, this.hardW, this.hardH);
+                ctx.drawImage(easyButton, this.easyX, this.easyY, this.easyW, this.easyH);
+            }
+
+            ctx.drawImage(dSprite, this.spX, this.spY, this.sW, this.sH, this.pmX, this.pmY, this.sW, this.sH);
+            ctx.drawImage(dSprite, this.sppX, this.sppY, this.sW, this.sH, this.smX, this.pmY, this.sW, this.sH);
         }
     }
 }
@@ -103,11 +186,46 @@ cvs.addEventListener("click", function(evt){
             let clickY = evt.clientY - rect.top;
             // CHECK IF WE CLICK ON THE START BUTTON
             if(clickX >= startBtn.x && clickX <= startBtn.x + startBtn.w && clickY >= startBtn.y && clickY <= startBtn.y + startBtn.h){
-                pipes.reset();
-                tuffy.speedReset();
-                score.reset();
-                medals.reset();
-                state.current = state.getReady;
+                startBtn.press();
+            }
+            
+            if(clickX >= gameControl.smX && clickX <= gameControl.smX + gameControl.sW && 
+                clickY >= gameControl.pmY && clickY <= gameControl.pmY + gameControl.sH){
+                bMusic.play();
+                HIT.play();
+            }
+
+            if(clickX >= gameControl.pmX && clickX <= gameControl.pmX + gameControl.sW && 
+                clickY >= gameControl.pmY && clickY <= gameControl.pmY + gameControl.sH){
+                bMusic.pause();
+                HIT.play();
+            }
+            
+            if(!gSetting.isMenu)
+            {
+                if(clickX >= gameControl.easyX && clickX <= gameControl.easyX + startBtn.w && 
+                    clickY >= gameControl.easyY && clickY <= gameControl.easyY + startBtn.h){
+                    gSetting.isMenu = !gSetting.isMenu;
+                    HIT.play();
+                }
+            }
+            else
+            {
+                gSetting.isMenu = !gSetting.isMenu;
+
+                if(clickX >= gameControl.easyX && clickX <= gameControl.easyX + gameControl.easyW && 
+                    clickY >= gameControl.easyY && clickY <= gameControl.easyY + gameControl.easyH){
+                    gSetting.pressEasy();
+                    startBtn.press();
+                    HIT.play();
+                }
+
+                if(clickX >= gameControl.hardX && clickX <= gameControl.hardX + gameControl.hardW && 
+                    clickY >= gameControl.hardY && clickY <= gameControl.hardY + gameControl.hardH){
+                    gSetting.pressHard();
+                    startBtn.press();
+                    HIT.play();
+                }
             }
             break;
     }
@@ -278,20 +396,6 @@ const gameOver = {
         }
     }
 
-}
-
-const gSetting =
-{
-    frame1 : 200,
-    frame2 : 150,
-    frame3 : 90,
-    frame4 : 80,
-    gap1 : 150,
-    gap2 : 130,
-    score1 : 5,
-    score2 : 10,
-    score3 : 20,
-    score4 : 100
 }
 
 // PIPES
