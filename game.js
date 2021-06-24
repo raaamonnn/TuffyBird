@@ -22,6 +22,10 @@ bg2.src = "img/csuf-2.png";
 const eleph = new Image();
 eleph.src = "img/tuffyclear.png";
 
+const easyButton = new Image();
+easyButton.src = "img/easyB.png";
+const hardButton = new Image();
+hardButton.src = "img/hardB.png";
 // LOAD SOUNDS
 
 const scoreSound = "audio/sfx_point.wav";
@@ -53,9 +57,30 @@ const state = {
 // START BUTTON COORD
 const startBtn = {
     x : 120,
-    y : 263,
+    y : 260,
     w : 83,
     h : 29
+}
+
+const gameControl =
+{
+    easyX : 120,
+    easyY : 295,
+    easyW : 83,
+    easyH : 29,
+
+    hardX : 120,
+    hardY : 330,
+    hardW : 83,
+    hardH : 29,
+
+    draw : function(){
+        if(state.current == state.over)
+        {
+            ctx.drawImage(hardButton, this.hardX, this.hardY, this.hardW, this.hardH);
+            ctx.drawImage(easyButton, this.easyX, this.easyY, this.easyW, this.easyH);
+        }
+    }
 }
 
 // CONTROL THE GAME
@@ -255,7 +280,19 @@ const gameOver = {
 
 }
 
-
+const gSetting =
+{
+    frame1 : 200,
+    frame2 : 150,
+    frame3 : 90,
+    frame4 : 80,
+    gap1 : 150,
+    gap2 : 130,
+    score1 : 5,
+    score2 : 10,
+    score3 : 20,
+    score4 : 100
+}
 
 // PIPES
 const pipes = {
@@ -294,26 +331,26 @@ const pipes = {
     update: function(){
             if(state.current !== state.game) return;
 
-            if(score.value < 5) {
-                pipes.gap = 150;
-                if(frames%150 == 0){
+            if(score.value < gSetting.score1) {
+                pipes.gap = gSetting.gap1;
+                if(frames%gSetting.frame1 == 0){
                     this.position.push({
                         x : cvs.width,
                         y : this.maxYPos * ( Math.random() + 1)
                     });
                 }
             }
-            else if(score.value < 10) {
-                if(frames%100 == 0){
-                    pipes.gap = 130;
+            else if(score.value < gSetting.score2) {
+                if(frames%gSetting.frame2 == 0){
+                    pipes.gap = gSetting.gap2;
                     this.position.push({
                         x : cvs.width,
                         y : this.maxYPos * ( Math.random() + 1)
                     });
                 }
             }
-            else if (score.value < 20) {
-                if(frames%80 == 0){
+            else if (score.value < gSetting.score3) {
+                if(frames%gSetting.frame3 == 0){
                     pipes.gap = getRandomArbitrary(111,129);
                     this.position.push({
                         x : cvs.width,
@@ -321,8 +358,8 @@ const pipes = {
                     });
                 }
             }
-            else if (score.value < 100) {
-                if(frames%70 == 0){
+            else if (score.value < gSetting.score4) {
+                if(frames%gSetting.frame4 == 0){
                     pipes.gap = getRandomArbitrary(100,110);
                     this.position.push({
                         x : cvs.width,
@@ -330,6 +367,7 @@ const pipes = {
                     });
                 }
             }
+            
         for(let i = 0; i < this.position.length; i++){
             let p = this.position[i];
 
@@ -449,6 +487,7 @@ function draw(){
     gameOver.draw();
     score.draw();
     medals.draw();
+    gameControl.draw();
 }
 
 function update(){
