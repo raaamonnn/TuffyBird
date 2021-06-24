@@ -401,8 +401,6 @@ const coins = {
     position: [],
     sX: 0,
     sY : 4,
-    x: 50,
-    y: 190,
     w : 37,
     h : 37,
     maxYPos: 150,
