@@ -73,6 +73,7 @@ const gSetting =
     score4 : 100,
 
     isMenu : false,
+    isPlaying : false,
 
     pressEasy : function()
     {
@@ -122,18 +123,11 @@ const startBtn = {
 
 const gameControl =
 {
-    sMenuX : 772,
-    sMenuY : 82,
-    menuW : 63,
-    menuH : 20,
-
-    easyX : 120,
-    easyY : 295,
     easyW : 83,
     easyH : 29,
 
     hardX : 120,
-    hardY : 330,
+    hardY : 295,
     hardW : 83,
     hardH : 29,
 
@@ -146,22 +140,22 @@ const gameControl =
 
     pmX : 295,
     pmY : 5,
-    smX : 270,
 
     draw : function(){
         if(state.current == state.over)
         {
-            if(!gSetting.isMenu)
-                ctx.drawImage(dSprite, this.sMenuX, this.sMenuY, this.menuW, this.menuH, this.easyX, this.easyY, startBtn.w, startBtn.h);
-            
             if(gSetting.isMenu)
             {
                 ctx.drawImage(hardButton, this.hardX, this.hardY, this.hardW, this.hardH);
-                ctx.drawImage(easyButton, this.easyX, this.easyY, this.easyW, this.easyH);
+                ctx.drawImage(easyButton, startBtn.x, startBtn.y, this.easyW, this.easyH);
             }
 
-            ctx.drawImage(dSprite, this.spX, this.spY, this.sW, this.sH, this.pmX, this.pmY, this.sW, this.sH);
-            ctx.drawImage(dSprite, this.sppX, this.sppY, this.sW, this.sH, this.smX, this.pmY, this.sW, this.sH);
+            if(gSetting.isPlaying){
+                ctx.drawImage(dSprite, this.spX, this.spY, this.sW, this.sH, this.pmX, this.pmY, this.sW, this.sH);
+            }
+            else {
+                ctx.drawImage(dSprite, this.sppX, this.sppY, this.sW, this.sH, this.pmX, this.pmY, this.sW, this.sH);
+            }
         }
     }
 }
@@ -184,37 +178,33 @@ cvs.addEventListener("click", function(evt){
             let rect = cvs.getBoundingClientRect();
             let clickX = evt.clientX - rect.left;
             let clickY = evt.clientY - rect.top;
-            // CHECK IF WE CLICK ON THE START BUTTON
-            if(clickX >= startBtn.x && clickX <= startBtn.x + startBtn.w && clickY >= startBtn.y && clickY <= startBtn.y + startBtn.h){
-                startBtn.press();
-            }
-            
-            if(clickX >= gameControl.smX && clickX <= gameControl.smX + gameControl.sW && 
-                clickY >= gameControl.pmY && clickY <= gameControl.pmY + gameControl.sH){
-                bMusic.play();
-                HIT.play();
-            }
 
             if(clickX >= gameControl.pmX && clickX <= gameControl.pmX + gameControl.sW && 
                 clickY >= gameControl.pmY && clickY <= gameControl.pmY + gameControl.sH){
-                bMusic.pause();
+
+                if(gSetting.isPlaying)
+                    bMusic.pause();
+                else
+                    bMusic.play();
+
+                gSetting.isPlaying = !gSetting.isPlaying;
                 HIT.play();
             }
-            
+
             if(!gSetting.isMenu)
             {
-                if(clickX >= gameControl.easyX && clickX <= gameControl.easyX + startBtn.w && 
-                    clickY >= gameControl.easyY && clickY <= gameControl.easyY + startBtn.h){
+                // CHECK IF WE CLICK ON THE START BUTTON
+                if(clickX >= startBtn.x && clickX <= startBtn.x + startBtn.w &&
+                     clickY >= startBtn.y && clickY <= startBtn.y + startBtn.h){
                     gSetting.isMenu = !gSetting.isMenu;
-                    HIT.play();
                 }
             }
             else
             {
                 gSetting.isMenu = !gSetting.isMenu;
 
-                if(clickX >= gameControl.easyX && clickX <= gameControl.easyX + gameControl.easyW && 
-                    clickY >= gameControl.easyY && clickY <= gameControl.easyY + gameControl.easyH){
+                if(clickX >= startBtn.x && clickX <= startBtn.x + gameControl.easyW && 
+                    clickY >= startBtn.y && clickY <= startBtn.y + gameControl.easyH){
                     gSetting.pressEasy();
                     startBtn.press();
                     HIT.play();
@@ -392,7 +382,13 @@ const gameOver = {
 
     draw: function(){
         if(state.current == state.over){
-            ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x, this.y, this.w, this.h);
+
+            if(gSetting.isMenu){
+                ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h - 30, this.x, this.y, this.w, this.h - 30);
+            }
+            else{
+                ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x, this.y, this.w, this.h);
+            }
         }
     }
 
