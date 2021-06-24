@@ -14,6 +14,8 @@ const sprite = new Image();
 sprite.src = "img/sprite.png";
 const dSprite = new Image();
 dSprite.src = "img/dogeSprite.png";
+const cSprite = new Image();
+cSprite.src = "img/coin.png";
 // LOAD BACKGROUND IMAGE
 const bg = new Image();
 bg.src = "img/bg.png";
@@ -114,6 +116,7 @@ const startBtn = {
     press : function()
     {
         pipes.reset();
+        coins.reset();
         tuffy.speedReset();
         score.reset();
         medals.reset();
@@ -393,6 +396,95 @@ const gameOver = {
     }
 
 }
+// Coins
+const coins = {
+    position: [],
+    sX: 0,
+    sY : 4,
+    x: 50,
+    y: 190,
+    w : 37,
+    h : 37,
+    maxYPos: 150,
+    maxXPos: 100,
+    dx: 2,
+
+    draw : function(){
+        // spawns a coin at the beginning
+        for(let i  = 0; i < this.position.length; i++){
+            let p = this.position[i];
+            let coinPos = p.y + this.h;
+            ctx.drawImage(cSprite, this.sX, this.sY, this.w, this.h, p.x, p.y, this.w, this.h);
+        }
+    },
+
+    update: function(){
+        if(state.current !== state.game) return;
+
+        if(score.value < gSetting.score1) {
+            if(frames%gSetting.frame1 == 0){
+                this.position.push({
+                    x : this.maxXPos * ( Math.random() + 1),
+                    y : this.maxYPos * ( Math.random() + 1)
+                });
+            }
+        }
+
+        else if(score.value < gSetting.score2) {
+            if(frames%gSetting.frame2 == 0){
+                this.position.push({
+                    x : this.maxXPos * ( Math.random() + 1),
+                    y : this.maxYPos * ( Math.random() + 1)
+                });
+            }
+        }
+        else if (score.value < gSetting.score3) {
+            if(frames%gSetting.frame3 == 0){
+                this.position.push({
+                    x : this.maxXPos * ( Math.random() + 1),
+                    y : this.maxYPos * ( Math.random() + 1)
+                });
+            }
+        }
+        else if (score.value < gSetting.score4) {
+            if(frames%gSetting.frame4 == 0){
+                this.position.push({
+                    x : this.maxXPos * ( Math.random() + 1),
+                    y : this.maxYPos * ( Math.random() + 1)
+                });
+            }
+        }
+
+        for(let i = 0; i < this.position.length; i++){
+            let p = this.position[i];
+
+            // COLLISION DETECTION
+            // coin
+            if(tuffy.x + tuffy.radius > p.x
+                && tuffy.x - tuffy.radius < p.x + this.w && tuffy.y + tuffy.radius > p.y
+                && tuffy.y - tuffy.radius < p.y + this.h){
+                this.position.shift();
+                score.coinVal += 1;
+                const SCORE_S = new Audio();
+                SCORE_S.src = scoreSound;
+                SCORE_S.play();
+                console.log("Coins collected: " + score.coinVal);
+            }
+
+            // MOVE THE COINS TO THE LEFT
+            p.x -= this.dx;
+
+        }
+    },
+
+
+
+    reset : function(){
+        this.position = [];
+    }
+
+}
+
 
 // PIPES
 const pipes = {
@@ -511,6 +603,7 @@ const pipes = {
 const score= {
     best : parseInt(localStorage.getItem("best")) || 0,
     value : 0,
+    coinVal: 0,
 
     draw : function(){
         ctx.fillStyle = "#FFF";
@@ -527,6 +620,10 @@ const score= {
             ctx.font = "25px Teko";
             ctx.fillText(this.value, 225, 186);
             ctx.strokeText(this.value, 225, 186);
+            // COIN VALUE
+            ctx.font = "25px Teko";
+            ctx.fillText(this.coinVal, 165, 186);
+            ctx.strokeText(this.coinVal, 165, 186);
             // BEST SCORE
             ctx.fillText(this.best, 225, 228);
             ctx.strokeText(this.best, 225, 228);
@@ -535,6 +632,7 @@ const score= {
 
     reset : function(){
         this.value = 0;
+        this.coinVal = 0;
     }
 }
 
@@ -580,6 +678,7 @@ function draw(){
     ctx.fillRect(0, 0, cvs.width, cvs.height);
 
     background.draw();
+    coins.draw();
     pipes.draw();
     foreground.draw();
     tuffy.draw();
@@ -594,6 +693,7 @@ function update(){
     background.update();
     foreground.update();
     pipes.update();
+    coins.update();
     let now = new Date().getTime();
     let delta = now - then;
     if (delta > interval) {
