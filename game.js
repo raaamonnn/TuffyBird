@@ -644,10 +644,10 @@ const medals = {
     y: 177,     //Y cord of where to draw
 
     draw: function () {
-        if(score.value >= 20){
+        if(score.value >= 30){
             this.sX = 359
             this.sY = 158;
-        } else if (score.value >= 15){
+        } else if (score.value >= 20){
             this.sX = 311;
             this.sY = 158;
         } else if (score.value >= 10){
