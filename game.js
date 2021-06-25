@@ -411,7 +411,6 @@ const coins = {
         // spawns a coin at the beginning
         for(let i  = 0; i < this.position.length; i++){
             let p = this.position[i];
-            let coinPos = p.y + this.h;
             ctx.drawImage(cSprite, this.sX, this.sY, this.w, this.h, p.x, p.y, this.w, this.h);
         }
     },
@@ -462,11 +461,10 @@ const coins = {
                 && tuffy.x - tuffy.radius < p.x + this.w && tuffy.y + tuffy.radius > p.y
                 && tuffy.y - tuffy.radius < p.y + this.h){
                 this.position.shift();
-                score.coinVal += 1;
+                score.value += 1;
                 const SCORE_S = new Audio();
                 SCORE_S.src = scoreSound;
                 SCORE_S.play();
-                console.log("Coins collected: " + score.coinVal);
             }
 
             // MOVE THE COINS TO THE LEFT
@@ -618,10 +616,6 @@ const score= {
             ctx.font = "25px Teko";
             ctx.fillText(this.value, 225, 186);
             ctx.strokeText(this.value, 225, 186);
-            // COIN VALUE
-            ctx.font = "25px Teko";
-            ctx.fillText(this.coinVal, 165, 186);
-            ctx.strokeText(this.coinVal, 165, 186);
             // BEST SCORE
             ctx.fillText(this.best, 225, 228);
             ctx.strokeText(this.best, 225, 228);
