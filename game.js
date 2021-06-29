@@ -5,8 +5,12 @@ const ctx = cvs.getContext("2d");
 // GAME VARS AND CONSTS
 let frames = 0;
 let then = new Date().getTime();
-//let delta = 0;
 let interval = 1000 / 60;
+let pattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+let current = 0;
+let cheats = false;
+let coinValue = 1;
+
 const DEGREE = Math.PI/180;
 
 // LOAD SPRITE IMAGE
@@ -24,7 +28,7 @@ const bg2 = new Image();
 bg2.src = "img/csuf-2.png";
 
 const eleph = new Image();
-eleph.src = "img/tuffyclear.png";
+eleph.src = "img/TuffyClear.png";
 
 const easyButton = new Image();
 easyButton.src = "img/easyB.png";
@@ -44,6 +48,9 @@ SWOOSHING.src = "audio/sfx_swooshing.wav";
 
 const DIE = new Audio();
 DIE.src = "audio/sfx_die.wav";
+
+const CHEAT = new Audio();
+CHEAT.src = "audio/cheat.wav";
 
 const bMusic = new Audio();
 bMusic.src = "audio/song.mp4";
@@ -292,7 +299,7 @@ const tuffy = {
     ],
     x : 50,
     y : 150,
-    w : 64,
+    w : 64, 
     h : 64,
 
     radius : 12,
@@ -461,7 +468,9 @@ const coins = {
                 && tuffy.x - tuffy.radius < p.x + this.w && tuffy.y + tuffy.radius > p.y
                 && tuffy.y - tuffy.radius < p.y + this.h){
                 this.position.shift();
-                score.value += 1;
+                score.value += coinValue;
+                score.best = Math.max(score.value, score.best);
+                localStorage.setItem("best", score.best);
                 const SCORE_S = new Audio();
                 SCORE_S.src = scoreSound;
                 SCORE_S.play();
@@ -665,6 +674,37 @@ const medals = {
     }
 }
 
+//CHEAT CODE
+const keyHandler = function (event) {
+
+	// If the key isn't in the pattern, or isn't the current key in the pattern, reset
+	if (pattern.indexOf(event.key) < 0 || event.key !== pattern[current]) {
+		current = 0;
+		return;
+	}
+
+	// Update how much of the pattern is complete
+	current++;
+
+	// If complete, alert and reset
+	if (pattern.length === current) {
+		current = 0;
+        cheats = !cheats;
+        if(cheats){
+            coinValue = 5;
+            eleph.src = "img/Konami.png"
+        } else {
+            coinValue = 1;
+            eleph.src = "img/TuffyClear.png"
+        }
+        CHEAT.play();
+	}
+    
+
+};
+
+document.addEventListener('keydown', keyHandler, false);
+
 function draw(){
     ctx.fillStyle = "#70c5ce";
     ctx.fillRect(0, 0, cvs.width, cvs.height);
@@ -686,6 +726,7 @@ function update(){
     foreground.update();
     pipes.update();
     coins.update();
+    //tuffy.update();
     let now = new Date().getTime();
     let delta = now - then;
     if (delta > interval) {
