@@ -41,6 +41,7 @@ const flapSound = "audio/sfx_flap.wav";
 
 
 const HIT = new Audio();
+HIT.volume = 0.5;
 HIT.src = "audio/sfx_hit.wav";
 
 const SWOOSHING = new Audio();
@@ -53,6 +54,7 @@ const CHEAT = new Audio();
 CHEAT.src = "audio/cheat.wav";
 
 const bMusic = new Audio();
+bMusic.volume = 0.1;
 bMusic.src = "audio/song.mp4";
 
 // function gets a random number between the specific min and max
@@ -473,6 +475,7 @@ const coins = {
                 localStorage.setItem("best", score.best);
                 const SCORE_S = new Audio();
                 SCORE_S.src = scoreSound;
+                SCORE_S.volume = 0.3;
                 SCORE_S.play();
             }
 
@@ -591,6 +594,7 @@ const pipes = {
                 score.value += 1;
                 const SCORE_S = new Audio();
                 SCORE_S.src = scoreSound;
+                SCORE_S.volume = 0.3;
                 SCORE_S.play();
                 score.best = Math.max(score.value, score.best);
                 localStorage.setItem("best", score.best);
