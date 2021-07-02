@@ -30,10 +30,14 @@ const bg2 = new Image();
 const eleph = new Image();
 eleph.src = "img/TuffyClear.png";
 
+const elanim = new Image();
+elanim.src = "img/TuffyAnimate.png";
+
 const easyButton = new Image();
 easyButton.src = "img/easyB.png";
 const hardButton = new Image();
 hardButton.src = "img/hardB.png";
+
 // LOAD SOUNDS
 
 const scoreSound = "audio/sfx_point.wav";
