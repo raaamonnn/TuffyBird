@@ -588,11 +588,14 @@ const enemy = {
 
             // COLLISION DETECTION
             // enemy
-            if(tuffy.x + tuffy.radius > p.x
-                && tuffy.x - tuffy.radius < p.x + this.w && tuffy.y + tuffy.radius > p.y
-                && tuffy.y - tuffy.radius < p.y + this.h){
-                state.current = state.over;
-                HIT.play();
+            if(!cheats)
+            {
+                if(tuffy.x + tuffy.radius > p.x
+                    && tuffy.x - tuffy.radius < p.x + this.w && tuffy.y + tuffy.radius > p.y
+                    && tuffy.y - tuffy.radius < p.y + this.h){
+                    state.current = state.over;
+                    HIT.play();
+                }
             }
 
             // MOVE THE Enemy TO THE LEFT
