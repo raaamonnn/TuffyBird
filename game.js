@@ -301,10 +301,10 @@ const foreground = {
 
 const tuffy = {
     animation : [
-        {sX: 422, sY : 311},
-        {sX: 422, sY : 359},
-	{sX: 422, sY : 311},
-        {sX: 422, sY : 359}
+        {sX: 114, sY : 414},
+        {sX: 160, sY : 414},
+	{sX: 114, sY : 414},
+        {sX: 160, sY : 414}
     ],
     x : 50,
     y : 150,
