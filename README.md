@@ -4,6 +4,10 @@ CPSC 362 Group Project
 
 Project: Creating a Flappy Bird game clone using Tuffy as our hero in the adventure.
 
+How to play the game on your computer:
+1) Download this Code
+2) Open the Folder
+3) Run the index.html file
 
 Eduardo Rayo - erayo@csu.fullerton.edu
 
