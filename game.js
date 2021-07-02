@@ -301,8 +301,10 @@ const foreground = {
 
 const tuffy = {
     animation : [
-        {sX: 12, sY : 18},
-        {sX: 12, sY : 18},
+        {sX: 422, sY : 311},
+        {sX: 422, sY : 359},
+	{sX: 422, sY : 311},
+        {sX: 422, sY : 359}
     ],
     x : 50,
     y : 150,
@@ -324,7 +326,7 @@ const tuffy = {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rotation);
-        ctx.drawImage(eleph, bird.sX, bird.sY, this.w, this.h,- this.w/2, - this.h/2, this.w, this.h);
+        ctx.drawImage(sprite, bird.sX, bird.sY, this.w, this.h,- this.w/2, - this.h/2, this.w, this.h);
 
         ctx.restore();
     },
