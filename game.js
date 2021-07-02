@@ -88,7 +88,7 @@ const gSetting =
     score2 : 10,
     score3 : 20,
     score4 : 100,
-
+    dxEnemy : 1,
     isMenu : false,
     isPlaying : false,
     enemy : false,
@@ -105,6 +105,7 @@ const gSetting =
         this.score2 = 10;
         this.score3 = 20;
         this.score4 = 40;
+        this.dxEnemy = 1;
     },
 
     pressMedium : function()
@@ -119,6 +120,7 @@ const gSetting =
         this.score2 = 8;
         this.score3 = 15;
         this.score4 = 30;
+        this.dxEnemy = 2;
     },
 
     pressHard : function()
@@ -133,6 +135,7 @@ const gSetting =
         this.score2 = 8;
         this.score3 = 15;
         this.score4 = 25;
+        this.dxEnemy = 3;
     }
 }
 
@@ -551,7 +554,6 @@ const enemy = {
     h : 31,
     maxYPos: 150,
     maxXPos: 120,
-    dx: 2,
 
     draw : function(){
         // spawns a coin at the beginning
@@ -621,7 +623,7 @@ const enemy = {
             }
 
             // MOVE THE Enemy TO THE LEFT
-            p.x -= this.dx;
+            p.x -= gSetting.dxEnemy;
             if(p.y > 20) {
                 p.y -= 1;
             }
