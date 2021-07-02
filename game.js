@@ -25,7 +25,7 @@ const bg = new Image();
 bg.src = "img/bg.png";
 
 const bg2 = new Image();
-bg2.src = "img/csuf-2.png";
+
 
 const eleph = new Image();
 eleph.src = "img/TuffyClear.png";
@@ -51,6 +51,7 @@ const DIE = new Audio();
 DIE.src = "audio/sfx_die.wav";
 
 const CHEAT = new Audio();
+CHEAT.volume = 0.5;
 CHEAT.src = "audio/cheat.wav";
 
 const bMusic = new Audio();
@@ -696,10 +697,14 @@ const keyHandler = function (event) {
         cheats = !cheats;
         if(cheats){
             coinValue = 5;
-            eleph.src = "img/Konami.png"
+            eleph.src = "img/Konami.png";
+            bg.src = "img/special.jpg";
+            bg2.src = "img/special.jpg";
         } else {
             coinValue = 1;
-            eleph.src = "img/TuffyClear.png"
+            eleph.src = "img/TuffyClear.png";
+            bg.src = "img/bg.png";
+            bg2.src = "img/csuf-2.png";
         }
         CHEAT.play();
 	}
