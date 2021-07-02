@@ -307,7 +307,7 @@ const tuffy = {
     x : 50,
     y : 150,
     w : 64, 
-    h : 48,
+    h : 46,
 
     radius : 12,
 
