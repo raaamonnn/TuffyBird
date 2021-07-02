@@ -554,6 +554,16 @@ const pipes = {
             let topYPos = p.y;
             let bottomYPos = p.y + this.h + this.gap;
 
+
+            if(score.value > gSetting.score2)
+            {
+                // top pipe
+                ctx.drawImage(dSprite, 139, 595, 40, 200, p.x, topYPos, this.w, this.h);
+
+                // bottom pipe
+                ctx.drawImage(dSprite, 95, 546, 40, 200, p.x, bottomYPos, this.w, this.h);
+                continue;
+            }
             // top pipe
             ctx.drawImage(sprite, this.top.sX, this.top.sY, this.w, this.h, p.x, topYPos, this.w, this.h);
 
