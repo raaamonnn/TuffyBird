@@ -91,7 +91,7 @@ const gSetting =
 
     isMenu : false,
     isPlaying : false,
-
+    enemy : false,
     pressEasy : function()
     {
         this.gap1 = 170;
@@ -186,7 +186,7 @@ const gameControl =
             {
                 ctx.drawImage(hardButton, this.hardX, this.hardY, this.hardW, this.hardH);
                 ctx.drawImage(mediumButton, this.mediumX, this.mediumY, this.mediumW, this.mediumH);
-
+                ctx.drawImage(sprite, 423, 211, 43, 31, startBtn.x + 100, startBtn.y, 43, 31);
                 ctx.drawImage(easyButton, startBtn.x, startBtn.y, this.easyW, this.easyH);
             }
 
@@ -260,6 +260,13 @@ cvs.addEventListener("click", function(evt){
                 if(clickX >= gameControl.mediumX && clickX <= gameControl.mediumX + gameControl.mediumW && 
                     clickY >= gameControl.mediumY && clickY <= gameControl.mediumY + gameControl.mediumH){
                     gSetting.pressMedium();
+                    startBtn.press();
+                    HIT.play();
+                }
+
+                if(clickX >= startBtn.x + 100 && clickX <= startBtn.x + 100 + 43 && 
+                    clickY >= startBtn.y && clickY <= startBtn.y + 31){
+                    gSetting.enemy = !gSetting.enemy;
                     startBtn.press();
                     HIT.play();
                 }
@@ -851,7 +858,10 @@ function draw(){
     background.draw();
     coins.draw();
     pipes.draw();
-    enemy.draw();
+    if(gSetting.enemy)
+    {
+        enemy.draw();
+    }
     foreground.draw();
     tuffy.draw();
     getReady.draw();
@@ -866,7 +876,10 @@ function update(){
     foreground.update();
     pipes.update();
     coins.update();
-    enemy.update();
+    if(gSetting.enemy)
+    {
+        enemy.update();
+    }
     //tuffy.update();
     let now = new Date().getTime();
     let delta = now - then;
