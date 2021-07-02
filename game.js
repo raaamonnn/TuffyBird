@@ -37,7 +37,8 @@ const easyButton = new Image();
 easyButton.src = "img/easyB.png";
 const hardButton = new Image();
 hardButton.src = "img/hardB.png";
-
+const mediumButton = new Image();
+mediumButton.src = "img/mediumButton.png";
 // LOAD SOUNDS
 
 const scoreSound = "audio/sfx_point.wav";
@@ -105,6 +106,20 @@ const gSetting =
         this.score4 = 40;
     },
 
+    pressMedium : function()
+    {
+        this.gap1 = 170;
+        this.gap2 = 150;
+        this.frame1 = 210;
+        this.frame2 = 160;
+        this.frame3 = 100;
+        this.frame4 = 90;
+        this.score1 = 5;
+        this.score2 = 10;
+        this.score3 = 20;
+        this.score4 = 40;
+    },
+
     pressHard : function()
     {
         this.gap1 = 130;
@@ -143,8 +158,13 @@ const gameControl =
     easyW : 83,
     easyH : 29,
 
+    mediumX : 120,
+    mediumY : 295,
+    mediumW : 83,
+    mediumH : 29,
+
     hardX : 120,
-    hardY : 295,
+    hardY : 330,
     hardW : 83,
     hardH : 29,
 
@@ -164,6 +184,8 @@ const gameControl =
             if(gSetting.isMenu)
             {
                 ctx.drawImage(hardButton, this.hardX, this.hardY, this.hardW, this.hardH);
+                ctx.drawImage(mediumButton, this.mediumX, this.mediumY, this.mediumW, this.mediumH);
+
                 ctx.drawImage(easyButton, startBtn.x, startBtn.y, this.easyW, this.easyH);
             }
 
@@ -230,6 +252,13 @@ cvs.addEventListener("click", function(evt){
                 if(clickX >= gameControl.hardX && clickX <= gameControl.hardX + gameControl.hardW && 
                     clickY >= gameControl.hardY && clickY <= gameControl.hardY + gameControl.hardH){
                     gSetting.pressHard();
+                    startBtn.press();
+                    HIT.play();
+                }
+
+                if(clickX >= gameControl.mediumX && clickX <= gameControl.mediumX + gameControl.mediumW && 
+                    clickY >= gameControl.mediumY && clickY <= gameControl.mediumY + gameControl.mediumH){
+                    gSetting.pressMedium();
                     startBtn.press();
                     HIT.play();
                 }
