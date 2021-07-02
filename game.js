@@ -146,6 +146,7 @@ const startBtn = {
     {
         pipes.reset();
         coins.reset();
+        enemy.reset();
         tuffy.speedReset();
         score.reset();
         medals.reset();
@@ -526,7 +527,90 @@ const coins = {
     }
 
 }
+// Enemy
+const enemy = {
+    position: [],
+    sX: 423,
+    sY : 211,
+    w : 43,
+    h : 31,
+    maxYPos: 150,
+    maxXPos: 120,
+    dx: 2,
 
+    draw : function(){
+        // spawns a coin at the beginning
+        for(let i  = 0; i < this.position.length; i++){
+            let p = this.position[i];
+            ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, p.x, p.y, this.w, this.h);
+        }
+    },
+
+    update: function(){
+        if(state.current !== state.game) return;
+
+        if(score.value < gSetting.score1) {
+            if(frames%gSetting.frame1 == 0){
+                this.position.push({
+                    x : this.maxXPos * ( Math.random() + 1),
+                    y : this.maxYPos * ( Math.random() + 1)
+                });
+            }
+        }
+
+        else if(score.value < gSetting.score2) {
+            if(frames%gSetting.frame2 == 0){
+                this.position.push({
+                    x : this.maxXPos * ( Math.random() + 1),
+                    y : this.maxYPos * ( Math.random() + 1)
+                });
+            }
+        }
+        else if (score.value < gSetting.score3) {
+            if(frames%gSetting.frame3 == 0){
+                this.position.push({
+                    x : this.maxXPos * ( Math.random() + 1),
+                    y : this.maxYPos * ( Math.random() + 1)
+                });
+            }
+        }
+        else if (score.value < gSetting.score4) {
+            if(frames%gSetting.frame4 == 0){
+                this.position.push({
+                    x : this.maxXPos * ( Math.random() + 1),
+                    y : this.maxYPos * ( Math.random() + 1)
+                });
+            }
+        }
+
+        for(let i = 0; i < this.position.length; i++){
+            let p = this.position[i];
+
+            // COLLISION DETECTION
+            // enemy
+            if(tuffy.x + tuffy.radius > p.x
+                && tuffy.x - tuffy.radius < p.x + this.w && tuffy.y + tuffy.radius > p.y
+                && tuffy.y - tuffy.radius < p.y + this.h){
+                state.current = state.over;
+                HIT.play();
+            }
+
+            // MOVE THE Enemy TO THE LEFT
+            p.x -= this.dx;
+            if(p.y > 20) {
+                p.y -= 1;
+            }
+            else if(p.y < 90){
+                p.y += 1;
+            }
+        }
+    },
+
+    reset : function(){
+        this.position = [];
+    }
+
+}
 
 // PIPES
 const pipes = {
@@ -754,6 +838,7 @@ function draw(){
     background.draw();
     coins.draw();
     pipes.draw();
+    enemy.draw();
     foreground.draw();
     tuffy.draw();
     getReady.draw();
@@ -768,6 +853,7 @@ function update(){
     foreground.update();
     pipes.update();
     coins.update();
+    enemy.update();
     //tuffy.update();
     let now = new Date().getTime();
     let delta = now - then;
