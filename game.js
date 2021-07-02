@@ -92,6 +92,7 @@ const gSetting =
     isMenu : false,
     isPlaying : false,
     enemy : false,
+    falpEnemy : false,
     pressEasy : function()
     {
         this.gap1 = 170;
@@ -108,16 +109,16 @@ const gSetting =
 
     pressMedium : function()
     {
-        this.gap1 = 170;
-        this.gap2 = 150;
-        this.frame1 = 210;
-        this.frame2 = 160;
-        this.frame3 = 100;
-        this.frame4 = 90;
-        this.score1 = 5;
-        this.score2 = 10;
-        this.score3 = 20;
-        this.score4 = 40;
+        this.gap1 = 150;
+        this.gap2 = 140;
+        this.frame1 = 200;
+        this.frame2 = 140;
+        this.frame3 = 120;
+        this.frame4 = 70;
+        this.score1 = 6;
+        this.score2 = 8;
+        this.score3 = 15;
+        this.score4 = 30;
     },
 
     pressHard : function()
@@ -187,6 +188,7 @@ const gameControl =
                 ctx.drawImage(hardButton, this.hardX, this.hardY, this.hardW, this.hardH);
                 ctx.drawImage(mediumButton, this.mediumX, this.mediumY, this.mediumW, this.mediumH);
                 ctx.drawImage(sprite, 423, 211, 43, 31, startBtn.x + 100, startBtn.y, 43, 31);
+                ctx.drawImage(sprite, 277, 164, 30, 30, startBtn.x + 100, this.mediumY, 30, 30);
                 ctx.drawImage(easyButton, startBtn.x, startBtn.y, this.easyW, this.easyH);
             }
 
@@ -267,6 +269,13 @@ cvs.addEventListener("click", function(evt){
                 if(clickX >= startBtn.x + 100 && clickX <= startBtn.x + 100 + 43 && 
                     clickY >= startBtn.y && clickY <= startBtn.y + 31){
                     gSetting.enemy = !gSetting.enemy;
+                    startBtn.press();
+                    HIT.play();
+                }
+
+                if(clickX >= startBtn.x + 100 && clickX <= startBtn.x + 100 + 30 && 
+                    clickY >= gameControl.mediumY && clickY <= gameControl.mediumY + 30){
+                    gSetting.falpEnemy = !gSetting.falpEnemy;
                     startBtn.press();
                     HIT.play();
                 }
@@ -362,7 +371,6 @@ const tuffy = {
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rotation);
         ctx.drawImage(sprite, bird.sX, bird.sY, this.w, this.h,- this.w/2, - this.h/2, this.w, this.h);
-
         ctx.restore();
     },
 
@@ -549,7 +557,14 @@ const enemy = {
         // spawns a coin at the beginning
         for(let i  = 0; i < this.position.length; i++){
             let p = this.position[i];
-            ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, p.x, p.y, this.w, this.h);
+            if(gSetting.falpEnemy)
+            {
+                ctx.drawImage(sprite, 277, 164, 30, 30, p.x, p.y, this.w, this.h);
+            }
+            else
+            {
+                ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, p.x, p.y, this.w, this.h);
+            }
         }
     },
 
