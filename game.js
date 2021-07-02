@@ -25,7 +25,7 @@ const bg = new Image();
 bg.src = "img/bg.png";
 
 const bg2 = new Image();
-
+bg2.src = "img/csuf-2.png";
 
 const eleph = new Image();
 eleph.src = "img/TuffyClear.png";
